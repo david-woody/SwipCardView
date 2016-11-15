@@ -1,33 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.adoregeek.swipcard.widget.SwipCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_main"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="350dp"
-        android:layout_height="350dp"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:background="@drawable/shape_buttom_bg_colorprimary"
-        android:gravity="center"
-        android:text="I can be dragged !" />
-
-    <TextView
-        android:layout_width="350dp"
-        android:layout_height="350dp"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:background="@drawable/shape_buttom_bg_colorprimary"
-        android:gravity="center"
-        android:text="I can be dragged !" />
-
-    <TextView
-        android:layout_width="350dp"
-        android:layout_height="350dp"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:background="@drawable/shape_buttom_bg_colorprimary"
-        android:gravity="center"
-        android:text="I can be dragged !" />
-</com.adoregeek.swipcard.widget.SwipCardView>
+    <com.adoregeek.swipcard.widget.SwipCardView2
+        android:id="@+id/swipCards"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></com.adoregeek.swipcard.widget.SwipCardView2>
+</RelativeLayout>
