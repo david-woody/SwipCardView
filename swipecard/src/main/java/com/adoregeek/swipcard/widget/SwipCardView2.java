@@ -22,7 +22,7 @@ public class SwipCardView2 extends RecyclerView {
     public static final int DIRECTION_RIGHT = 1 << 2;
     private OnPostcardDismissListener mOnPostcardDismissListener;
     private float ROTATION_DEGREES = 2f;
-    
+
     public SwipCardView2(Context context) {
         super(context);
         init(context);
@@ -36,7 +36,12 @@ public class SwipCardView2 extends RecyclerView {
     public SwipCardView2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
+
     }
+
+    private int childWidth;
+    private int initTop;
+    private View topChildView;
 
     private void init(Context context) {
         mViewDragHelper = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
@@ -76,9 +81,13 @@ public class SwipCardView2 extends RecyclerView {
             public void onViewCaptured(View capturedChild, int activePointerId) {
                 super.onViewCaptured(capturedChild, activePointerId);
                 if (isReleased) {
+                    childWidth = capturedChild.getWidth();
+                    initTop = capturedChild.getTop();
                     originLeft = capturedChild.getLeft();
                     originTop = capturedChild.getTop();
-                    System.out.println("originLeft=" + originLeft + "originTop=" + originTop);
+                    topChildView = capturedChild;
+                } else {
+                    topChildView = null;
                 }
             }
 
@@ -108,17 +117,37 @@ public class SwipCardView2 extends RecyclerView {
             @Override
             public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
                 super.onViewPositionChanged(changedView, left, top, dx, dy);
-                System.out.println("lef=" + left + "top=" + top + "dx=" + dx + "dy=" + dy);
-                final float dxx = originLeft - left;
-                final float dyy = originTop - top;
-
-                adjustChildrenUnderTop();
+                final int dxx = originLeft - left;
+                final int dyy = originTop - top;
+                float rotation = 1f * dxx / (childWidth / 2);
+                changedView.setRotation(3f * (dyy < 0 ? 1 : -1) * -rotation);
+                adjustChildrenUnderTop(Math.abs(rotation));
             }
         });
     }
 
-    private void adjustChildrenUnderTop() {
+    private final float SCALE_STEP = 0.08f;
+    private final int mOffsetY = 60;
 
+    private void adjustChildrenUnderTop(float rate) {
+        int multiple = 0;
+        for (int childPosition = getChildCount() - 2; childPosition > -1; childPosition--) {
+            View childVeiw = getChildAt(childPosition);
+            rate = Math.min(rate, 1);
+            if (childPosition == getChildCount() - 2) {
+                multiple = 1;
+                float offset = mOffsetY * rate;
+                childVeiw.setTranslationY(60 * multiple - 60 * rate);
+                childVeiw.setScaleX(1 - SCALE_STEP * multiple + SCALE_STEP * rate);
+                childVeiw.setScaleY(1 - SCALE_STEP * multiple + SCALE_STEP * rate);
+            } else if (childPosition == getChildCount() - 3) {
+                multiple = 2;
+                float offset = mOffsetY * rate;
+                childVeiw.setTranslationY(60 * multiple - 60 * rate);
+                childVeiw.setScaleX(1 - SCALE_STEP * multiple + SCALE_STEP * rate);
+                childVeiw.setScaleY(1 - SCALE_STEP * multiple + SCALE_STEP * rate);
+            }
+        }
     }
 
     @Override

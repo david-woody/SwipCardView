@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         word.add(new CardBean());
         word.add(new CardBean());
         word.add(new CardBean());
+        word.add(new CardBean());
+        word.add(new CardBean());
         adapter = new CardListAdapter(this);
         swipCards.setAdapter(adapter);
         adapter.add(word);

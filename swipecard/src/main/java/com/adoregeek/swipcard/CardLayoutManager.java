@@ -16,7 +16,7 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
                 RecyclerView.LayoutParams.WRAP_CONTENT);
     }
 
-    private final int mOffsetY = 40;
+    private final int mOffsetY = 60;
 
     @Override
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
@@ -31,21 +31,23 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
             addView(child);
             int width = getDecoratedMeasuredWidth(child);
             int height = getDecoratedMeasuredHeight(child);
-            layoutDecorated(child, (getWidth() - width) / 2, mOffsetY, (getWidth() - width) / 2 + width,mOffsetY+ height);
+            layoutDecorated(child, (getWidth() - width) / 2, mOffsetY, (getWidth() - width) / 2 + width, mOffsetY + height);
+            child.setRotation(0);
             if (i == 0) {
                 child.setScaleX(1);
                 child.setScaleY(1);
                 child.setTranslationY(0);
             } else if (i == 1) {
-                child.setScaleX(0.95f);
-                child.setScaleY(0.95f);
+                child.setScaleX(0.92f);
+                child.setScaleY(0.92f);
                 child.setTranslationY(mOffsetY);
             } else {
-                child.setScaleX(0.5f);
-                child.setScaleY(0.5f);
+                child.setScaleX(0.84f);
+                child.setScaleY(0.84f);
                 child.setTranslationY(2 * mOffsetY);
-                child.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
             }
+
+//
         }
 //        for (int i = 0; i < getItemCount(); i++) {
 //            View view = recycler.getViewForPosition(i);
