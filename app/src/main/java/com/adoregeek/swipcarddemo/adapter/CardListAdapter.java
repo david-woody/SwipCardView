@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import com.adoregeek.swipcard.adapter.BaseListAdapter;
 import com.adoregeek.swipcarddemo.R;
@@ -38,8 +40,9 @@ public class CardListAdapter extends BaseListAdapter<CardBean, CardListAdapter.V
                 .load(bean.url)
                 .placeholder(R.mipmap.commactivity_imgbg)
                 .error(R.mipmap.commactivity_imgbg)
-                .centerCrop()
+                .fitCenter()
                 .into(holder.ivPhoto);
+        holder.tvTitle.setText(bean.title);
     }
 
 
@@ -47,12 +50,14 @@ public class CardListAdapter extends BaseListAdapter<CardBean, CardListAdapter.V
         View rootView;
         SquareImageView ivPhoto;
         Button btClick;
+        TextView tvTitle;
 
         public ViewHolder(View itemView) {
             super(itemView);
             rootView = itemView;
             ivPhoto = (SquareImageView) rootView.findViewById(R.id.ivPhoto);
             btClick = (Button) rootView.findViewById(R.id.btClick);
+            tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);
         }
     }
 }

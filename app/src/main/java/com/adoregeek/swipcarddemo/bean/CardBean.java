@@ -6,5 +6,7 @@ package com.adoregeek.swipcarddemo.bean;
 
 public class CardBean {
     public String url;
-    public String info;
+    public String title;
+    public String updateTime;
+    public String updateUserId;
 }

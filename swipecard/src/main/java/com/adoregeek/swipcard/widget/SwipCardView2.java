@@ -18,32 +18,32 @@ public class SwipCardView2 extends RecyclerView {
     private ViewDragHelper mViewDragHelper;
     private int mMinDistance = 200;
     private int mDropDirection;
-    public static final int DIRECTION_LEFT = 1 << 1;
-    public static final int DIRECTION_RIGHT = 1 << 2;
+    public static final int DIRECTION_LEFT_TOP = 1;
+    public static final int DIRECTION_LEFT_BOTTOM = 3;
+    public static final int DIRECTION_RIGHT_TOP = 2;
+    public static final int DIRECTION_RIGHT_BOTTOM = 4;
     private OnPostcardDismissListener mOnPostcardDismissListener;
     private float ROTATION_DEGREES = 2f;
 
     public SwipCardView2(Context context) {
         super(context);
-        init(context);
+        init();
     }
 
     public SwipCardView2(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        init(context);
+        init();
     }
 
     public SwipCardView2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init();
 
     }
 
     private int childWidth;
-    private int initTop;
-    private View topChildView;
 
-    private void init(Context context) {
+    private void init() {
         mViewDragHelper = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
             @Override
             public boolean tryCaptureView(View child, int pointerId) {
@@ -65,10 +65,19 @@ public class SwipCardView2 extends RecyclerView {
                 float releasedLeft = releasedChild.getX();
                 float releasedTop = releasedChild.getY();
                 if (Math.abs(releasedLeft - originLeft) > mMinDistance) {
-                    if (releasedLeft > originLeft)
-                        mDropDirection = DIRECTION_RIGHT;
-                    else
-                        mDropDirection = DIRECTION_LEFT;
+                    if (releasedLeft > originLeft) {
+                        if (releasedTop < originTop) {
+                            mDropDirection = DIRECTION_RIGHT_TOP;
+                        } else {
+                            mDropDirection = DIRECTION_RIGHT_BOTTOM;
+                        }
+                    } else {
+                        if (releasedTop < originTop) {
+                            mDropDirection = DIRECTION_LEFT_TOP;
+                        } else {
+                            mDropDirection = DIRECTION_LEFT_BOTTOM;
+                        }
+                    }
                     dropSwipCard(mDropDirection);
                 } else {
                     mViewDragHelper.settleCapturedViewAt(originLeft, originTop);
@@ -82,12 +91,8 @@ public class SwipCardView2 extends RecyclerView {
                 super.onViewCaptured(capturedChild, activePointerId);
                 if (isReleased) {
                     childWidth = capturedChild.getWidth();
-                    initTop = capturedChild.getTop();
                     originLeft = capturedChild.getLeft();
                     originTop = capturedChild.getTop();
-                    topChildView = capturedChild;
-                } else {
-                    topChildView = null;
                 }
             }
 
@@ -120,7 +125,7 @@ public class SwipCardView2 extends RecyclerView {
                 final int dxx = originLeft - left;
                 final int dyy = originTop - top;
                 float rotation = 1f * dxx / (childWidth / 2);
-                changedView.setRotation(3f * (dyy < 0 ? 1 : -1) * -rotation);
+                changedView.setRotation(ROTATION_DEGREES * (dyy < 0 ? 1 : -1) * -rotation);
                 adjustChildrenUnderTop(Math.abs(rotation));
             }
         });
@@ -157,7 +162,7 @@ public class SwipCardView2 extends RecyclerView {
 
     private void dropSwipCard(int mDropDirection) {
         if (mOnPostcardDismissListener != null) {
-            mOnPostcardDismissListener.onPostcardDismiss(mDropDirection);
+            mOnPostcardDismissListener.onPostCardDismiss(mDropDirection);
         }
     }
 
@@ -193,7 +198,7 @@ public class SwipCardView2 extends RecyclerView {
     }
 
     public interface OnPostcardDismissListener {
-        void onPostcardDismiss(int direction);
+        void onPostCardDismiss(int direction);
     }
 
     public void setOnPostcardDismissListener(OnPostcardDismissListener onPostcardDismissListener) {
